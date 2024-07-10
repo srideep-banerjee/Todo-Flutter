@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:todo/add_todo_screen.dart';
+import 'package:todo/search_util.dart';
 import 'package:todo/todo.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,21 +13,32 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool searchBarOpen = false;
-  TextEditingController controller = TextEditingController(text: "");
+  String searchText = "";
+  late Future<List<Todo>> todosFuture;
+
+  @override
+  void initState() {
+    todosFuture = SearchHandler.getTodos(searchText);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     AppBar appBar = switch(searchBarOpen) {
       true => searchAppBar(
         context,
-        controller,
         onSearchChange: (str) {
-
+          print("On Search Change: $str");
+          setState(() {
+            searchText = str;
+            todosFuture.ignore();
+            todosFuture = SearchHandler.getTodos(searchText);
+          });
         },
         onSearchClose: () {
-          controller.text = "";
           setState(() {
             searchBarOpen = false;
+            searchText = "";
           });
         },
       ),
@@ -51,17 +63,40 @@ class _MainScreenState extends State<MainScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      body: ListView.builder(
-        itemCount: localStorage.length,
-        itemBuilder: (context, index) {
-          return TodoItemDisplay(getTodo(index));
-        },
+      body: FutureBuilder<List<Todo>>(
+        future: todosFuture,
+        builder: (context, snapshot) {
+
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(
+              child: Text("Loading ..."),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text("An Error occurred"),
+            );
+          }
+
+          List<Todo> todoList = [];
+          if (snapshot.hasData) todoList = snapshot.data!;
+
+          if (todoList.isEmpty) {
+            return const Center(
+                child: Text("No todos found")
+            );
+          }
+
+          return ListView.builder(
+            itemCount: todoList.length,
+            itemBuilder: (context, index) {
+              return TodoItemDisplay(todoList[index]);
+            },
+          );
+        }
       ),
     );
-  }
-
-  Todo getTodo(int index) {
-    return Todo.fromJSON(localStorage.getItem("$index")!);
   }
 }
 
@@ -84,7 +119,6 @@ AppBar defaultAppBar(
 
 AppBar searchAppBar(
     BuildContext context,
-    TextEditingController searchController,
     {
       void Function(String str)? onSearchChange,
       void Function()? onSearchClose
@@ -96,7 +130,6 @@ AppBar searchAppBar(
       onPressed: onSearchClose,
     ),
     title: TextField(
-      controller: searchController,
       cursorColor: Theme.of(context).colorScheme.onPrimary,
       style: const TextStyle(color: Colors.white),
 
