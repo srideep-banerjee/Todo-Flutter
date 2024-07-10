@@ -1,12 +1,13 @@
 import 'dart:convert' as JSON;
 
 class Todo {
+  final int index;
   final String title;
   final String? description;
 
-  Todo(this.title, [this.description]);
+  Todo(this.index, this.title, [this.description]);
 
-  Todo fromJSON(String str) {
+  static Todo fromJSON(String str) {
     return JSON.jsonDecode(str);
   }
 
