@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/todo.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -40,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: appBar,
       body: ListView.builder(
         itemBuilder: (context, index) {
-          return TodoItemDisplay();
+          return TodoItemDisplay(Todo("$index"));
         },
       ),
     );
@@ -95,14 +96,16 @@ AppBar searchAppBar(
 }
 
 class TodoItemDisplay extends StatelessWidget {
-  const TodoItemDisplay({super.key});
+  final Todo todo;
+  const TodoItemDisplay(this.todo, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("Title"),
-        Text("Description")
+        Text(todo.title),
+        if (todo.description != null) 
+          Text(todo.description ?? "")
       ],
     );
   }
