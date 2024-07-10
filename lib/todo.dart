@@ -8,10 +8,16 @@ class Todo {
   Todo(this.index, this.title, [this.description]);
 
   static Todo fromJSON(String str) {
-    return JSON.jsonDecode(str);
+    Map<String,dynamic> map = JSON.jsonDecode(str);
+    return Todo(map["index"], map["title"], map["description"]);
   }
 
   String toJSON() {
-    return JSON.jsonEncode(this);
+    Map<String,dynamic> map = {
+      "title": title,
+      "description": description,
+      "index": index,
+    };
+    return JSON.jsonEncode(map);
   }
 }
