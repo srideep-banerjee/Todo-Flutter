@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: appBar,
       body: ListView.builder(
         itemBuilder: (context, index) {
-          return Text("$index");
+          return TodoItemDisplay();
         },
       ),
     );
@@ -92,4 +92,18 @@ AppBar searchAppBar(
     backgroundColor: Theme.of(context).colorScheme.primary,
     foregroundColor: Theme.of(context).colorScheme.onPrimary,
   );
+}
+
+class TodoItemDisplay extends StatelessWidget {
+  const TodoItemDisplay({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text("Title"),
+        Text("Description")
+      ],
+    );
+  }
 }
