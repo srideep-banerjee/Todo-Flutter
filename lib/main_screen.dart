@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:todo/add_todo_screen.dart';
 import 'package:todo/todo.dart';
 
@@ -51,11 +52,16 @@ class _MainScreenState extends State<MainScreen> {
         child: const Icon(Icons.add),
       ),
       body: ListView.builder(
+        itemCount: localStorage.length,
         itemBuilder: (context, index) {
-          return TodoItemDisplay(Todo("$index"));
+          return TodoItemDisplay(getTodo(index));
         },
       ),
     );
+  }
+
+  Todo getTodo(int index) {
+    return Todo.fromJSON(localStorage.getItem("$index")!);
   }
 }
 
