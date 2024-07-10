@@ -28,7 +28,6 @@ class _MainScreenState extends State<MainScreen> {
       true => searchAppBar(
         context,
         onSearchChange: (str) {
-          print("On Search Change: $str");
           setState(() {
             searchText = str;
             todosFuture.ignore();
