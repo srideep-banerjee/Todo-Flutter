@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/add_todo_screen.dart';
 import 'package:todo/todo.dart';
 
 class MainScreen extends StatefulWidget {
@@ -39,6 +40,16 @@ class _MainScreenState extends State<MainScreen> {
     };
     return Scaffold(
       appBar: appBar,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator
+              .of(context)
+              .push(MaterialPageRoute(builder: (context) {
+                return const AddTodoScreen();
+          }));
+        },
+        child: const Icon(Icons.add),
+      ),
       body: ListView.builder(
         itemBuilder: (context, index) {
           return TodoItemDisplay(Todo("$index"));
