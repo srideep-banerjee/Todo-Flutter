@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:todo/add_todo_screen.dart';
 import 'package:todo/search_util.dart';
 import 'package:todo/todo.dart';
@@ -62,7 +61,11 @@ class _MainScreenState extends State<MainScreen> {
               .of(context)
               .push(MaterialPageRoute(builder: (context) {
                 return const AddTodoScreen();
-          }));
+          })).then((value) {
+            setState(() {
+              todosFuture = SearchHandler.getTodos(searchText);
+            });
+          });
         },
       ),
       body: FutureBuilder<List<Todo>>(
