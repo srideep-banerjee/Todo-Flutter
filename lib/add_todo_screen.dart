@@ -31,8 +31,8 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Todo"),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -41,9 +41,8 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.save,
-              color: Theme.of(context).colorScheme.onPrimary,
             ),
             onPressed: () {
               if (titleController.text == "") return;
@@ -82,13 +81,18 @@ class TitleText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      maxLines: null,
+      maxLines: 1,
       expands: false,
       controller: controller,
       decoration: const InputDecoration.collapsed(
         hintText: "Enter title",
+        hintStyle: TextStyle(fontWeight: FontWeight.normal)
       ),
-      style: const TextStyle(fontSize: 30.0),
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 20.0,
+        fontWeight: FontWeight.w700
+      ),
     );
   }
 }

@@ -54,6 +54,10 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: appBar,
       floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        backgroundColor: Colors.black87,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
         onPressed: () {
           Navigator
               .of(context)
@@ -61,7 +65,6 @@ class _MainScreenState extends State<MainScreen> {
                 return const AddTodoScreen();
           }));
         },
-        child: const Icon(Icons.add),
       ),
       body: FutureBuilder<List<Todo>>(
         future: todosFuture,
@@ -88,10 +91,13 @@ class _MainScreenState extends State<MainScreen> {
             );
           }
 
-          return ListView.builder(
+          return ListView.separated(
             itemCount: todoList.length,
             itemBuilder: (context, index) {
               return TodoItemDisplay(todoList[index]);
+            },
+            separatorBuilder: (context, index) {
+              return const Divider();
             },
           );
         }
@@ -105,9 +111,12 @@ AppBar defaultAppBar(
     {void Function()? onSearchOpen}
     ) {
   return AppBar(
+    elevation: 1,
+    surfaceTintColor: Colors.transparent,
+    shadowColor: Colors.black,
     title: const Text("Todo"),
-    backgroundColor: Theme.of(context).colorScheme.primary,
-    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+    backgroundColor: Colors.white,
+    foregroundColor: Colors.black,
     actions: [
       IconButton(
         icon: const Icon(Icons.search),
@@ -125,23 +134,26 @@ AppBar searchAppBar(
     }
     ) {
   return AppBar(
+    elevation: 1,
+    surfaceTintColor: Colors.transparent,
+    shadowColor: Colors.black,
     leading: IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: onSearchClose,
     ),
     title: TextField(
-      cursorColor: Theme.of(context).colorScheme.onPrimary,
-      style: const TextStyle(color: Colors.white),
+      cursorColor: Colors.black,
+      style: TextStyle(color: Colors.black.withAlpha(200)),
 
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         hintText: 'Search...',
-        hintStyle: TextStyle(color: Colors.white38),
+        hintStyle: TextStyle(color: Colors.black.withAlpha(150)),
         border: InputBorder.none,
       ),
       onChanged: onSearchChange,
     ),
-    backgroundColor: Theme.of(context).colorScheme.primary,
-    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+    backgroundColor: Colors.white,
+    foregroundColor: Colors.black,
   );
 }
 
@@ -151,12 +163,23 @@ class TodoItemDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(todo.title),
-        if (todo.description != null) 
-          Text(todo.description ?? "")
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            todo.title,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          if (todo.description != null)
+            Text(todo.description ?? "")
+        ],
+      ),
     );
   }
 }
