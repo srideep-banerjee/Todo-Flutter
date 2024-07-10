@@ -37,6 +37,7 @@ class _MainScreenState extends State<MainScreen> {
           setState(() {
             searchBarOpen = false;
             searchText = "";
+            todosFuture = SearchHandler.getTodos(searchText);
           });
         },
       ),
